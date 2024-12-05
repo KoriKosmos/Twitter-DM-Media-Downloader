@@ -1,11 +1,12 @@
 import json
 import os
-import requests
 import subprocess
+import time
+
+import requests
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from selenium import webdriver
-import time
 
 # Path to Chrome executable
 chrome_path = "/path/to/chrome.exe"
@@ -24,6 +25,7 @@ service = Service(chromedriver_path)
 
 driver = webdriver.Chrome(service=service, options=options)
 
+
 # Load Twitter with saved cookies
 def load_cookies_from_json(cookies_file):
     driver.get("https://twitter.com")
@@ -38,11 +40,13 @@ def load_cookies_from_json(cookies_file):
         return False
     return True
 
+
 # Convert Selenium cookies to requests format
 def get_session_cookies():
     selenium_cookies = driver.get_cookies()
     session_cookies = {cookie["name"]: cookie["value"] for cookie in selenium_cookies}
     return session_cookies
+
 
 # Function to clean up and download media
 # Function to clean up and download media with full headers
@@ -93,7 +97,8 @@ def download_media(url, media_type, session_cookies):
             print(f"Headers: {headers}")
 
             # Convert .m3u8 to .mp4 using FFmpeg
-            output_filename = os.path.join(download_folder, f"{cleaned_url.split('/')[-1].split('?')[0].split('.')[0]}.mp4")
+            output_filename = os.path.join(download_folder,
+                                           f"{cleaned_url.split('/')[-1].split('?')[0].split('.')[0]}.mp4")
             command = [
                 "ffmpeg",
                 "-headers", f"Cookie: {'; '.join([f'{k}={v}' for k, v in session_cookies.items()])}",
@@ -136,7 +141,8 @@ def extract_and_download_urls_live():
                                 download_media(url, "video", session_cookies)
 
                         # Capture `.jpg`, `.png`, and `.gif` as images, excluding "preview" and "profile_images"
-                        elif any(ext in url for ext in [".jpg", ".png", ".gif"]) and not any(exclude in url for exclude in ["preview", "profile_images"]):
+                        elif any(ext in url for ext in [".jpg", ".png", ".gif"]) and not any(
+                                exclude in url for exclude in ["preview", "profile_images"]):
                             if url not in seen_urls:
                                 seen_urls.add(url)
                                 print(f"Captured Image/GIF URL: {url}")
@@ -151,6 +157,7 @@ def extract_and_download_urls_live():
         print("\nStopped live URL extraction.")
         return seen_urls
 
+
 # Main Execution
 if __name__ == "__main__":
     try:
@@ -163,7 +170,8 @@ if __name__ == "__main__":
             print(f"Opened DM: {dm_url}")
 
             # Wait for user input to start URL extraction
-            input("Press Enter to start extracting and downloading URLs after you have navigated to the desired location...")
+            input(
+                "Press Enter to start extracting and downloading URLs after you have navigated to the desired location...")
 
             # Extract and download URLs live
             extracted_urls = extract_and_download_urls_live()
@@ -184,4 +192,4 @@ if __name__ == "__main__":
         driver.quit()
         print("Browser closed. Goodbye!")
 
-#%%
+# %%
