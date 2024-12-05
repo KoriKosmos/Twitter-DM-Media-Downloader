@@ -46,18 +46,18 @@ npx @puppeteer/browsers install chromedriver@stable
 
 ## Usage
 
-### 1. Login and Save Cookies
+### 1. Edit login.py and extract.py
+Edit `chrome_path` and `chromedriver_path` to point to the binaries you downloaded with npm earlier.
+
+(Optionally) Point the `dm_url` under the main function in extract.py to point to a specific DM (e.g `https://x.com/messages/123-xyz`).
+
+### 2. Login and Save Cookies
 Run the script to log in to Twitter/X and save your session cookies.
 Follow the prompts to log in manually in the browser.:
 
 ```bash
 python login.py
 ```
-
-### 2. Edit import.py
-Edit `chrome_path` and `chromedriver_path` to point to the binaries you downloaded with npm earlier.
-
-(Optionally) Point the `dm_url` under the main function to point to a specific DM (e.g `https://x.com/messages/123-xyz`).
 
 ### 3. Begin downloading
 
